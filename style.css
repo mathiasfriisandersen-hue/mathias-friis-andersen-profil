@@ -44,6 +44,12 @@ a {
   text-decoration: none;
 }
 
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid rgba(44, 139, 131, 0.42);
+  outline-offset: 3px;
+}
+
 p,
 h1,
 h2,
@@ -401,6 +407,7 @@ h3 {
 
 .portrait-media {
   position: relative;
+  aspect-ratio: 4 / 5;
   min-height: 456px;
   overflow: hidden;
   background:
@@ -410,7 +417,7 @@ h3 {
 
 .portrait-media img {
   width: 100%;
-  height: 456px;
+  height: 100%;
   display: block;
   object-fit: cover;
   object-position: center;
@@ -804,6 +811,10 @@ h3 {
   color: var(--navy);
 }
 
+.text-link:focus-visible {
+  color: var(--navy);
+}
+
 .card-index {
   width: 42px;
   height: 42px;
@@ -891,6 +902,7 @@ h3 {
 .footer-inner {
   min-height: 82px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
@@ -1063,11 +1075,7 @@ h3 {
   }
 
   .portrait-media {
-    min-height: 390px;
-  }
-
-  .portrait-media img {
-    height: 390px;
+    min-height: 0;
   }
 
   .portrait-label {

@@ -3,6 +3,8 @@ const navToggle = document.querySelector("[data-nav-toggle]");
 const navMenu = document.querySelector("[data-nav-menu]");
 const navLinks = [...document.querySelectorAll(".nav-links a")];
 const currentPage = document.body.dataset.page;
+const mobileNavQuery = window.matchMedia("(max-width: 760px)");
+const navToggleLabel = navToggle?.querySelector(".sr-only");
 
 function setHeaderState() {
   header?.classList.toggle("is-scrolled", window.scrollY > 16);
@@ -12,6 +14,25 @@ function closeMenu() {
   document.body.classList.remove("nav-open");
   navMenu?.classList.remove("is-open");
   navToggle?.setAttribute("aria-expanded", "false");
+  updateMenuA11y();
+}
+
+function updateMenuA11y() {
+  const isMobile = mobileNavQuery.matches;
+  const isOpen = navToggle?.getAttribute("aria-expanded") === "true";
+
+  navMenu?.setAttribute("aria-hidden", String(isMobile && !isOpen));
+  navLinks.forEach((link) => {
+    if (isMobile && !isOpen) {
+      link.setAttribute("tabindex", "-1");
+    } else {
+      link.removeAttribute("tabindex");
+    }
+  });
+
+  if (navToggleLabel) {
+    navToggleLabel.textContent = isOpen ? "Luk menu" : "Åbn menu";
+  }
 }
 
 navLinks.forEach((link) => {
@@ -28,6 +49,7 @@ navToggle?.addEventListener("click", () => {
   document.body.classList.toggle("nav-open", !isOpen);
   navMenu?.classList.toggle("is-open", !isOpen);
   navToggle.setAttribute("aria-expanded", String(!isOpen));
+  updateMenuA11y();
 });
 
 document.addEventListener("keydown", (event) => {
@@ -53,4 +75,6 @@ document.querySelectorAll(".reveal").forEach((element) => {
 });
 
 setHeaderState();
+updateMenuA11y();
+mobileNavQuery.addEventListener("change", closeMenu);
 window.addEventListener("scroll", setHeaderState, { passive: true });
